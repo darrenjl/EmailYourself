@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+
+  "name": "Email Yourself",
+  "description": "This extension emails a pre configured email address the link to the current page.",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs"
+  ],
+  "browser_action": {
+    "default_icon": {
+        "19": "icon.png",
+        "38": "icon.png"
+    },
+    "default_title": "Email Yourself",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+  {
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["content.js"]
+  },
+  "devtools_page": "devtools.html",
+  
+]
+}
