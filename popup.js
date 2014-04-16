@@ -8,9 +8,16 @@ function onPageInfo(o)  {
 // Global reference to the status display SPAN
 var statusDisplay = null;
 
-// POST the data to the server using XMLHttpRequest
+function emailExists(){
+    email = localStorage.email;
+
+    if(email == undefined || email == "") {
+        return false;
+    }
+    return true;    
+};
+
 function saveEmail() {
-    // Cancel the form submit
     event.preventDefault();
 
     var email = encodeURIComponent(document.getElementById('email').value);    
@@ -27,7 +34,7 @@ window.addEventListener('load', function(evt) {
     // Call the getPageInfo function in the background page, injecting content_script.js 
     // into the current HTML page and passing in our onPageInfo function as the callback
     chrome.extension.getBackgroundPage().getPageInfo(onPageInfo);
-    exists = chrome.extension.getBackgroundPage().emailExists();
+    exists = emailExists();
     if (exists) {        
         window.close();
     }

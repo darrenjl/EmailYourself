@@ -9,15 +9,6 @@ function getPageInfo(callback) {
     chrome.tabs.executeScript(null, { file: 'content_script.js' }); 
 }; 
 
-function emailExists(){
-	email = localStorage.email;
-
-	if(email == undefined) {
-		return false;
-	}
-	return true;	
-};
-
 // Perform the callback when a request is received from the content script
 chrome.extension.onMessage.addListener(function(request)  { 
     // Get the first callback in the callbacks array
