@@ -1,8 +1,7 @@
 // This callback function is called when the content script has been 
 // injected and returned its results
 function onPageInfo(o)  { 
-    console.log(o.title); 
-    console.log(o.url); 
+    sendEmail(decodeURIComponent(localStorage.email), o.title, encodeURIComponent(o.url));    
 } 
 
 // Global reference to the status display SPAN
@@ -22,8 +21,24 @@ function saveEmail() {
 
     var email = encodeURIComponent(document.getElementById('email').value);    
     localStorage.email = email;
-    window.close();
-}
+    chrome.extension.getBackgroundPage().getPageInfo(onPageInfo); 
+};
+
+function sendEmail(email, subject, body) {
+    $.ajax({ 
+             type: "GET",
+             dataType: "json",
+             url: "https://script.google.com/macros/s/AKfycbwpNFmh9INcnlaLdW5WZxKVaWDaFMljAI6Mo4EJ_qYdW6XbRC2F/exec?email=" + email + "&subject=" + subject + "&body=" + body,
+             success: function(data){        
+                window.close();
+                console.log(data);
+             },
+             error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.error(textStatus);
+                console.error(errorThrown);
+            }
+         });
+};
 
 // When the popup HTML has loaded
 window.addEventListener('load', function(evt) {
@@ -33,9 +48,10 @@ window.addEventListener('load', function(evt) {
     statusDisplay = document.getElementById('status-display');
     // Call the getPageInfo function in the background page, injecting content_script.js 
     // into the current HTML page and passing in our onPageInfo function as the callback
-    chrome.extension.getBackgroundPage().getPageInfo(onPageInfo);
     exists = emailExists();
     if (exists) {        
-        window.close();
+        chrome.extension.getBackgroundPage().getPageInfo(onPageInfo);        
+    } else {
+        console.error('no email provided');
     }
 });
