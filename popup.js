@@ -20,6 +20,7 @@ function saveEmail() {
     event.preventDefault();
 
     var email = encodeURIComponent(document.getElementById('email').value);    
+    console.log(email);
     localStorage.email = email;
     chrome.extension.getBackgroundPage().getPageInfo(onPageInfo); 
 };
@@ -30,12 +31,12 @@ function sendEmail(email, subject, body) {
              dataType: "json",
              url: "https://script.google.com/macros/s/AKfycbwpNFmh9INcnlaLdW5WZxKVaWDaFMljAI6Mo4EJ_qYdW6XbRC2F/exec?email=" + email + "&subject=" + subject + "&body=" + body,
              success: function(data){        
+                alert(data);
                 window.close();
-                console.log(data);
              },
              error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.error(textStatus);
-                console.error(errorThrown);
+                alert(textStatus);
+                alert(errorThrown);
             }
          });
 };
@@ -50,6 +51,8 @@ window.addEventListener('load', function(evt) {
     // into the current HTML page and passing in our onPageInfo function as the callback
     exists = emailExists();
     if (exists) {        
+        $("#emailDiv").hide();
+        $("#sendingDiv").show();
         chrome.extension.getBackgroundPage().getPageInfo(onPageInfo);        
     } else {
         console.error('no email provided');

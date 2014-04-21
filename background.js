@@ -4,6 +4,7 @@ var callbacks = [];
 // This function is called onload in the popup code
 function getPageInfo(callback) { 
     // Add the callback to the queue
+    console.log('getPageInfo');
     callbacks.push(callback); 
     // Inject the content script into the current page 
     chrome.tabs.executeScript(null, { file: 'content_script.js' }); 
