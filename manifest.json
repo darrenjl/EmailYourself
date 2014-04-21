@@ -4,7 +4,7 @@
     "description": "This extension emails a pre configured email address the link to the current page.",
     "version": "0.1",
     "background": {
-        "scripts": ["jquery-1.11.0.min.js", "background.js"],
+        "scripts": ["background.js"],
         "persistent": true
     },
     "browser_action": {
