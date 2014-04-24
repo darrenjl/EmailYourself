@@ -1,4 +1,4 @@
-package me.darrenlyons.emailyourself.activities;
+package me.darrenlyons.emailyourself.email;
 
 /**
  * Code copied from stackoverflow answer here: http://stackoverflow.com/a/18297311/1374923
@@ -18,6 +18,8 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -42,12 +44,12 @@ public class GmailSender {
         return token;
     }
 
-    public GmailSender(Activity ctx) {
+    public GmailSender(Context ctx) {
         super();
         initToken(ctx);
     }
 
-    public void initToken(Activity ctx) {
+    public void initToken(Context ctx) {
 
         AccountManager am = get(ctx);
 
@@ -64,7 +66,7 @@ public class GmailSender {
         Account me = accounts[0]; //You need to get a google account on the device, it changes if you have more than one
 
 
-        am.getAuthToken(me, "oauth2:https://mail.google.com/", null, ctx, new AccountManagerCallback<Bundle>(){
+        am.getAuthToken(me, "oauth2:https://mail.google.com/", true, new AccountManagerCallback<Bundle>(){
             @Override
             public void run(AccountManagerFuture<Bundle> result){
                 try{
@@ -102,8 +104,8 @@ public class GmailSender {
         final String emptyPassword = null;
 
 //        /* enable if you use this code on an Activity (just for test) or use the AsyncTask
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
 //         */
 
         transport.connect(host, port, userEmail, emptyPassword);
@@ -124,6 +126,7 @@ public class GmailSender {
 
             SMTPTransport smtpTransport = connectToSmtp("smtp.gmail.com", 587,
                     user, oauthToken, true);
+            Log.i("GmailSender", "finished connecting to smtp");
 
             MimeMessage message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(
@@ -137,6 +140,7 @@ public class GmailSender {
             else
                 message.setRecipient(Message.RecipientType.TO,
                         new InternetAddress(recipients));
+            Log.i("GmailSender", "about to send email");
             smtpTransport.sendMessage(message, message.getAllRecipients());
 
         } catch (Exception e) {
