@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Email Yourself"
-            android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
-</LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Email Yourself"
+                android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="With EmailYourself you can email a link using the share functionality from any application. Select Email Yourself from the application chooser and an email will be sent automatically to your email address. Authentication will be requested on first use."
+                    android:id="@+id/textView2" android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="7dp"
+                    android:padding="20px"
+                    />
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="If you would like to email an address other than your default google address please enter it here."
+                android:id="@+id/textView2" android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="7dp"
+                android:padding="20px"
+                />
+
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/email" android:layout_gravity="center_horizontal"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Email Address"
+                android:id="@+id/button" android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+</ScrollView>

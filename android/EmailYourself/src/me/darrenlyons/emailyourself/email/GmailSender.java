@@ -4,8 +4,17 @@ package me.darrenlyons.emailyourself.email;
  * Code copied from stackoverflow answer here: http://stackoverflow.com/a/18297311/1374923
  */
 
-import java.io.IOException;
-import java.util.Properties;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import com.sun.mail.smtp.SMTPTransport;
+import com.sun.mail.util.BASE64EncoderStream;
 
 import javax.activation.DataHandler;
 import javax.mail.Message;
@@ -14,17 +23,7 @@ import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
-
-import android.accounts.*;
-import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
-
-import com.sun.mail.smtp.SMTPTransport;
-import com.sun.mail.util.BASE64EncoderStream;
+import java.util.Properties;
 
 import static android.accounts.AccountManager.get;
 
@@ -84,7 +83,7 @@ public class GmailSender {
             }
         };
 
-        if(ctx instanceof Service){
+        if (ctx instanceof Service) {
             am.getAuthToken(me, "oauth2:https://mail.google.com/", true, callback, null);
         } else if (ctx instanceof Activity) {
             Activity activity = (Activity) ctx;
@@ -149,24 +148,24 @@ public class GmailSender {
     public synchronized void sendMail(String subject, String body, String user,
                                       String oauthToken, String recipients) throws Exception {
         if (authorised) {
-                SMTPTransport smtpTransport = connectToSmtp("smtp.gmail.com", 587,
-                        user, oauthToken, true);
-                Log.i(TAG, "finished connecting to smtp");
+            SMTPTransport smtpTransport = connectToSmtp("smtp.gmail.com", 587,
+                    user, oauthToken, true);
+            Log.i(TAG, "finished connecting to smtp");
 
-                MimeMessage message = new MimeMessage(session);
-                DataHandler handler = new DataHandler(new ByteArrayDataSource(
-                        body.getBytes(), "text/plain"));
-                message.setSender(new InternetAddress(user));
-                message.setSubject(subject);
-                message.setDataHandler(handler);
-                if (recipients.indexOf(',') > 0)
-                    message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(recipients));
-                else
-                    message.setRecipient(Message.RecipientType.TO,
-                            new InternetAddress(recipients));
-                Log.i(TAG, "about to send email");
-                smtpTransport.sendMessage(message, message.getAllRecipients());
+            MimeMessage message = new MimeMessage(session);
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(
+                    body.getBytes(), "text/plain"));
+            message.setSender(new InternetAddress(user));
+            message.setSubject(subject);
+            message.setDataHandler(handler);
+            if (recipients.indexOf(',') > 0)
+                message.setRecipients(Message.RecipientType.TO,
+                        InternetAddress.parse(recipients));
+            else
+                message.setRecipient(Message.RecipientType.TO,
+                        new InternetAddress(recipients));
+            Log.i(TAG, "about to send email");
+            smtpTransport.sendMessage(message, message.getAllRecipients());
 
         } else {
             Log.i("Send Email", "Not Authorised");
