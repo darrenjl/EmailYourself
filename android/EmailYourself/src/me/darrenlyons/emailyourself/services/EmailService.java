@@ -1,13 +1,12 @@
 package me.darrenlyons.emailyourself.services;
 
-import android.app.Activity;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
+import me.darrenlyons.emailyourself.activities.AuthActivity;
 import me.darrenlyons.emailyourself.email.GmailSender;
 
 public class EmailService extends Service {
@@ -57,7 +56,16 @@ public class EmailService extends Service {
         protected void onPostExecute(GmailSender gmailSender) {
             Log.i("EmailActivity", "Authorised: " + gmailSender.isAuthorised());
             if (gmailSender.isAuthorised()){
-                gmailSender.sendMail(sharedSubject, sharedText, gmailSender.getUser(), gmailSender.getToken(), gmailSender.getUser());
+                try {
+                    gmailSender.sendMail(sharedSubject, sharedText, gmailSender.getUser(), gmailSender.getToken(), gmailSender.getUser());
+                } catch (Exception e) {
+                    Log.d(TAG, "Exception thrown while trying to send email.");
+                    Intent intent = new Intent(parentService, AuthActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("sharedSubject", sharedSubject);
+                    intent.putExtra("sharedText", sharedText);
+                    startActivity(intent);
+                }
             }
             parentService.stopSelf();
         }

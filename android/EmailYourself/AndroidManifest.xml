@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".activities.MainActivity" android:label="Home">
+        <activity android:name=".activities.MainActivity" android:label="Email Yourself">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -20,6 +20,7 @@
                 <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activities.AuthActivity"/>
         <service android:name=".services.EmailService"/>
     </application>
 </manifest>
